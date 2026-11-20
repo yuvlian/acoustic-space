@@ -153,6 +153,7 @@
 				);
 				console.error(exception);
 			}
+			if (window.LiveCapture) window.LiveCapture.release();
 			if (mediaRecorder) { startRecording(); } else {
 				try { 
 					navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {

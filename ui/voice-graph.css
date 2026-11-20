@@ -221,3 +221,33 @@ voice-graph-2d .marker > .infobox {
 .instrument.tuba {
 	left: var(--padding);
 }
+
+button.live-toggle.active {
+	background: var(--accent);
+	color: var(--accent-text);
+}
+voice-graph-2d > .overlay > .marker.live-marker {
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+voice-graph-2d > .overlay > .marker.live-marker::before {
+	content: attr(data-label);
+	font-size: .65em;
+	font-weight: bold;
+	line-height: 1;
+}
+voice-graph-2d > .overlay > .marker.live-average {
+	background: var(--accent);
+	border: 2px solid white;
+	color: var(--accent-text);
+	box-shadow: 0 0 0 .35em rgba(255, 255, 255, .35);
+	opacity: 1;
+}
+voice-graph-2d > .overlay > .marker.live-now {
+	background: white;
+	border: 2px solid var(--accent);
+	color: var(--accent);
+	opacity: .95;
+}

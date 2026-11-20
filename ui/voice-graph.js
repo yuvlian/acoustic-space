@@ -81,7 +81,9 @@ class VoiceGraph {
 			}
 		});
 		globalState.render(['clips'], current => {
-			let orphanedMarkers = Array.from($$('.marker'));
+			let orphanedMarkers = Array.from($$('.marker')).filter(
+				marker => !marker.classList.contains('live-marker')
+			);
 			for (let clip of current.clips) {
 				if (!clip.marker) {
 					clip.marker = this.addMarker(pitchPercent(clip.medianPitch) || .5, clip.medianResonance || .5, null, null);

@@ -616,6 +616,36 @@ the same rights to the users of any resulting works.
             .instrument.tuba {
             	left: var(--padding);
             }
+
+            button.live-toggle.active {
+            	background: var(--accent);
+            	color: var(--accent-text);
+            }
+            voice-graph-2d > .overlay > .marker.live-marker {
+            	padding: 0;
+            	display: flex;
+            	align-items: center;
+            	justify-content: center;
+            }
+            voice-graph-2d > .overlay > .marker.live-marker::before {
+            	content: attr(data-label);
+            	font-size: .65em;
+            	font-weight: bold;
+            	line-height: 1;
+            }
+            voice-graph-2d > .overlay > .marker.live-average {
+            	background: var(--accent);
+            	border: 2px solid white;
+            	color: var(--accent-text);
+            	box-shadow: 0 0 0 .35em rgba(255, 255, 255, .35);
+            	opacity: 1;
+            }
+            voice-graph-2d > .overlay > .marker.live-now {
+            	background: white;
+            	border: 2px solid var(--accent);
+            	color: var(--accent);
+            	opacity: .95;
+            }
             				.spinner,
             .spinner:after {
               border-radius: 50%;
@@ -1071,6 +1101,13 @@ to help us in our research.
             <!-- ====================================================== -->
 
             			
+			<button class="live-toggle iconic" title='Live pitch and resonance from mic' aria-pressed="false">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+					<path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+					<path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h2a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1h2v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+				</svg>
+				<span>Live</span>
+			</button>
 			<button class="new-clip attention" title='Add new clip'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
   <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
 </svg><span>Clip</span></button>
@@ -1971,8 +2008,98 @@ to help us in our research.
             #delete-confirm {
             	transition: .3s all;
             }
+
+            .details .live-details {
+            	display: none;
+            }
+            .details.live .live-details {
+            	display: block;
+            }
+            .details.live > .instructions,
+            .details.live > .view {
+            	display: none !important;
+            }
+            .live-details .live-window {
+            	margin-left: auto;
+            	font-weight: bold;
+            }
+            .live-details .live-window input {
+            	width: 3em;
+            	height: auto;
+            	padding: .1em .2em;
+            	font: inherit;
+            	text-align: center;
+            }
+            .live-details .live-status {
+            	margin-top: .5em;
+            	opacity: .75;
+            }
+            .live-details .live-note {
+            	font-size: smaller;
+            	opacity: .75;
+            }
+            .live-details .live-dot {
+            	display: inline-block;
+            	width: .6em;
+            	height: .6em;
+            	margin-right: .35em;
+            	border-radius: 50%;
+            	background: var(--accent);
+            	animation: live-pulse 1.6s ease-in-out infinite;
+            }
+            .live-details.error .live-dot {
+            	background: #e0483f;
+            	animation: none;
+            }
+            @keyframes live-pulse {
+            	0%, 100% { opacity: 1; }
+            	50% { opacity: .35; }
+            }
+            @media (prefers-reduced-motion: reduce) {
+            	.live-details .live-dot { animation: none; }
+            }
+            @media (max-width: 500px) {
+            	.live-details table { font-size: .9em; }
+            }
             </style>
             <section class="details"> 
+            	<div class="live-details">
+            		<div class="hbox">
+            			<h2><span class="live-dot"></span>Live</h2>
+            			<label class="live-window">Window
+            				<input type="number" min="1" max="60" step="1" value="5" aria-label="Averaging window in seconds">
+            				s
+            			</label>
+            		</div>
+            		<table>
+            			<tr>
+            				<th></th>
+            				<th>Now</th>
+            				<th>Mean</th>
+            				<th>Median</th>
+            				<th>St. dev.</th>
+            			</tr>
+            			<tr>
+            				<th>Pitch</th>
+            				<td data-live="pitch-now">--</td>
+            				<td data-live="pitch-mean">--</td>
+            				<td data-live="pitch-median">--</td>
+            				<td data-live="pitch-sd">--</td>
+            			</tr>
+            			<tr>
+            				<th>Resonance</th>
+            				<td data-live="res-now">--</td>
+            				<td data-live="res-mean">--</td>
+            				<td data-live="res-median">--</td>
+            				<td data-live="res-sd">--</td>
+            			</tr>
+            		</table>
+            		<div class="live-status" data-live="status"></div>
+            		<p class="live-note">
+            			<strong>A</strong> marks the average over the window and
+            			<strong>N</strong> the current frame.
+            		</p>
+            	</div>
             	<h2 class='instructions'>Clip Details</h2>
             	<div class='instructions'>
             		When you select a clip/point from the graph it will be displayed here.
@@ -2340,6 +2467,7 @@ to help us in our research.
             				);
             				console.error(exception);
             			}
+            			if (window.LiveCapture) window.LiveCapture.release();
             			if (mediaRecorder) { startRecording(); } else {
             				try { 
             					navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
@@ -2603,6 +2731,8 @@ let brightIcon = String(`
 		
 			<script src="./ui/index.js"></script>
 			<script src="./ui/voice-graph.js"></script>
+			<script src="./ui/live-dsp.js"></script>
+			<script src="./ui/live.js"></script>
 		
 	</body>
 </html>

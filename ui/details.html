@@ -69,8 +69,98 @@ td.highlight {
 #delete-confirm {
 	transition: .3s all;
 }
+
+.details .live-details {
+	display: none;
+}
+.details.live .live-details {
+	display: block;
+}
+.details.live > .instructions,
+.details.live > .view {
+	display: none !important;
+}
+.live-details .live-window {
+	margin-left: auto;
+	font-weight: bold;
+}
+.live-details .live-window input {
+	width: 3em;
+	height: auto;
+	padding: .1em .2em;
+	font: inherit;
+	text-align: center;
+}
+.live-details .live-status {
+	margin-top: .5em;
+	opacity: .75;
+}
+.live-details .live-note {
+	font-size: smaller;
+	opacity: .75;
+}
+.live-details .live-dot {
+	display: inline-block;
+	width: .6em;
+	height: .6em;
+	margin-right: .35em;
+	border-radius: 50%;
+	background: var(--accent);
+	animation: live-pulse 1.6s ease-in-out infinite;
+}
+.live-details.error .live-dot {
+	background: #e0483f;
+	animation: none;
+}
+@keyframes live-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: .35; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.live-details .live-dot { animation: none; }
+}
+@media (max-width: 500px) {
+	.live-details table { font-size: .9em; }
+}
 </style>
 <section class="details"> 
+	<div class="live-details">
+		<div class="hbox">
+			<h2><span class="live-dot"></span>Live</h2>
+			<label class="live-window">Window
+				<input type="number" min="1" max="60" step="1" value="5" aria-label="Averaging window in seconds">
+				s
+			</label>
+		</div>
+		<table>
+			<tr>
+				<th></th>
+				<th>Now</th>
+				<th>Mean</th>
+				<th>Median</th>
+				<th>St. dev.</th>
+			</tr>
+			<tr>
+				<th>Pitch</th>
+				<td data-live="pitch-now">--</td>
+				<td data-live="pitch-mean">--</td>
+				<td data-live="pitch-median">--</td>
+				<td data-live="pitch-sd">--</td>
+			</tr>
+			<tr>
+				<th>Resonance</th>
+				<td data-live="res-now">--</td>
+				<td data-live="res-mean">--</td>
+				<td data-live="res-median">--</td>
+				<td data-live="res-sd">--</td>
+			</tr>
+		</table>
+		<div class="live-status" data-live="status"></div>
+		<p class="live-note">
+			<strong>A</strong> marks the average over the window and
+			<strong>N</strong> the current frame.
+		</p>
+	</div>
 	<h2 class='instructions'>Clip Details</h2>
 	<div class='instructions'>
 		When you select a clip/point from the graph it will be displayed here.
